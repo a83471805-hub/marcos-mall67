@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Маркос Молл — Торговый центр во Владимире</title>
+<meta name="description" content="Маркос Молл — современный торговый центр во Владимире. Магазины, рестораны, развлечения, события.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://api.fontsource.org/v1/css/unbounded/latin.css" rel="stylesheet">
+<link href="https://api.fontsource.org/v1/css/manrope/latin.css" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --c-bg:#F5F1EC;
+  --c-ink:#1A1A1A;
+  --c-ink-soft:#2A2A2A;
+  --c-muted:#8A8580;
+  --c-line:#E5E0D8;
+  --c-accent:#D94B2B;
+  --c-accent-deep:#B83A1E;
+  --c-warm:#F0E6D8;
+  --font-display:'Unbounded',sans-serif;
+  --font-body:'Manrope',sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --max:1440px;
+  --gutter:24px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--c-bg);
+  color:var(--c-ink);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;height:auto}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ===== HEADER ===== */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s var(--ease),padding .4s var(--ease),border-color .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.header.scrolled{
+  background:rgba(245,241,236,.92);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom-color:var(--c-line);
+  padding:14px 32px;
+}
+.header__logo{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:18px;
+  letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;
+}
+.header__logo-mark{
+  width:28px;height:28px;
+  background:var(--c-accent);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:700;
+}
+.header__nav{
+  display:flex;gap:32px;align-items:center;
+}
+.header__nav a{
+  font-size:14px;font-weight:500;
+  color:var(--c-ink-soft);
+  transition:color .25s var(--ease);
+  position:relative;
+}
+.header__nav a:hover{color:var(--c-accent)}
+.header__nav a.active{color:var(--c-ink);font-weight:600}
+.header__actions{
+  display:flex;align-items:center;gap:20px;
+}
+.header__hours{
+  font-size:12px;color:var(--c-muted);
+  display:flex;align-items:center;gap:6px;
+}
+.header__hours .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#3BA55C;
+}
+.header__search-btn,.header__menu-btn{
+  width:38px;height:38px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  transition:background .25s var(--ease);
+}
+.header__search-btn:hover,.header__menu-btn:hover{background:var(--c-line)}
+.header__menu-btn{display:none}
+
+/* ===== SEARCH OVERLAY ===== */
+.search-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(26,26,26,.96);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding-top:120px;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+.search-overlay.open{opacity:1;pointer-events:auto}
+.search-overlay__inner{width:100%;max-width:720px;padding:0 24px}
+.search-overlay__input{
+  width:100%;
+  background:transparent;
+  border:none;border-bottom:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  font-family:var(--font-display);
+  font-size:clamp(28px,4vw,48px);
+  padding:16px 0;
+  outline:none;
+}
+.search-overlay__input::placeholder{color:rgba(255,255,255,.3)}
+.search-overlay__close{
+  position:absolute;top:24px;right:24px;
+  width:44px;height:44px;
+  color:#fff;font-size:24px;
+}
+.search-results{margin-top:32px}
+.search-result{
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;
+  transition:padding .3s var(--ease);
+}
+.search-result:hover{padding-left:12px}
+.search-result__name{color:#fff;font-size:18px;font-weight:500}
+.search-result__meta{color:rgba(255,255,255,.5);font-size:13px;margin-top:4px}
+.search-result__tag{
+  font-size:11px;color:var(--c-accent);
+  text-transform:uppercase;letter-spacing:.08em;
+}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu{
+  position:fixed;inset:0;z-index:150;
+  background:var(--c-bg);
+  padding:100px 32px 40px;
+  transform:translateX(100%);
+  transition:transform .5s var(--ease);
+  overflow-y:auto;
+}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu__close{
+  position:absolute;top:20px;right:20px;
+  width:44px;height:44px;
+  font-size:24px;
+}
+.mobile-menu__link{
+  display:block;
+  font-family:var(--font-display);
+  font-size:28px;
+  font-weight:500;
+  padding:18px 0;
+  border-bottom:1px solid var(--c-line);
+  cursor:pointer;
+}
+.mobile-menu__hours{
+  margin-top:40px;
+  padding:20px;
+  background:var(--c-warm);
+  border-radius:4px;
+}
+.mobile-menu__hours-title{font-size:12px;color:var(--c-muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.mobile-menu__hours-value{font-family:var(--font-display);font-size:20px;font-weight:600}
+
+/* ===== PAGE SYSTEM ===== */
+.page{display:none;animation:pageIn .6s var(--ease)}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  height:100vh;min-height:640px;
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+  padding:60px 48px 48px;
+}
+.hero__bg{
+  position:absolute;inset:0;
+  background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/13614e692-fff3-4aa1-94aa-0e04fa16c304.png');
+  background-size:cover;background-position:center;
+  transform:scale(1.05);
+  transition:transform 8s var(--ease);
+}
+.hero:hover .hero__bg{transform:scale(1)}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(26,26,26,.2) 0%,rgba(26,26,26,.4) 50%,rgba(26,26,26,.75) 100%);
+}
+.hero__content{position:relative;z-index:2;color:#fff;max-width:var(--max);width:100%;margin:0 auto}
+.hero__eyebrow{
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero__eyebrow::before{
+  content:'';width:32px;height:1px;background:rgba(255,255,255,.5);
+}
+.hero__title{
+  font-family:var(--font-display);
+  font-size:clamp(42px,7vw,96px);
+  font-weight:700;
+  line-height:.95;
+  letter-spacing:-.03em;
+  max-width:900px;
+}
+.hero__title em{
+  font-style:normal;
+  color:var(--c-accent);
+}
+.hero__bottom{
+  margin-top:48px;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:24px;
+}
+.hero__meta{
+  display:flex;gap:40px;
+}
+.hero__meta-item{font-size:12px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em}
+.hero__meta-item strong{display:block;font-size:15px;color:#fff;font-weight:500;margin-top:6px;letter-spacing:0;text-transform:none}
+.hero__cta{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 28px;
+  background:#fff;color:var(--c-ink);
+  font-size:13px;font-weight:600;
+  letter-spacing:.02em;
+  border-radius:100px;
+  transition:all .3s var(--ease);
+}
+.hero__cta:hover{background:var(--c-accent);color:#fff;transform:translateY(-2px)}
+.hero__cta svg{transition:transform .3s var(--ease)}
+.hero__cta:hover svg{transform:translateX(4px)}
+
+/* ===== SECTIONS COMMON ===== */
+.section{padding:120px 48px;max-width:var(--max);margin:0 auto}
+.section--full{max-width:none;padding-left:48px;padding-right:48px}
+.section--dark{background:var(--c-ink);color:#fff}
+.section--dark .section__eyebrow{color:rgba(255,255,255,.5)}
+.section--warm{background:var(--c-warm)}
+.section__eyebrow{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--c-muted);
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.section__eyebrow::before{content:'';width:24px;height:1px;background:var(--c-muted)}
+.section__title{
+  font-family:var(--font-display);
+  font-size:clamp(32px,4.5vw,64px);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-.02em;
+  max-width:800px;
+  margin-bottom:24px;
+}
+.section__subtitle{
+  font-size:17px;
+  color:var(--c-muted);
+  max-width:560px;
+  line-height:1.6;
+}
+
+/* ===== INTRO ===== */
+.intro{
+  padding:140px 48px 100px;
+  max-width:var(--max);margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.intro__text{
+  font-family:var(--font-display);
+  font-size:clamp(28px,3.5vw,48px);
+  font-weight:500;
+  line-height:1.15;
+  letter-spacing:-.02em;
+}
+.intro__text em{font-style:normal;color:var(--c-accent)}
+.intro__aside{
+  display:flex;flex-direction:column;gap:24px;
+}
+.intro__stat{
+  padding-top:20px;
+  border-top:1px solid var(--c-line);
+}
+.intro__stat-num{
+  font-family:var(--font-display);
+  font-size:42px;font-weight:700;
+  letter-spacing:-.02em;
+}
+.intro__stat-label{font-size:13px;color:var(--c-muted);margin-top:4px}
+
+/* ===== DISCOVER (asymmetric) ===== */
+.discover-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-auto-rows:minmax(280px,auto);
+  gap:16px;
+  margin-top:64px;
+}
+.discover-card{
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  background:#000;
+}
+.discover-card__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.2s var(--ease),filter .6s var(--ease);
+  filter:brightness(.75);
+}
+.discover-card:hover .discover-card__img{transform:scale(1.08);filter:brightness(.9)}
+.discover-card__content{
+  position:absolute;inset:0;
+  padding:32px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  z-index:2;
+}
+.discover-card__tag{
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  margin-bottom:12px;
+}
+.discover-card__title{
+  font-family:var(--font-display);
+  font-size:clamp(24px,3vw,40px);
+  font-weight:600;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  margin-bottom:12px;
+}
+.discover-card__desc{
+  font-size:14px;color:rgba(255,255,255,.75);
+  max-width:400px;
+}
+.discover-card__arrow{
+  position:absolute;top:24px;right:24px;
+  width:40px;height:40px;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;
+  transition:all .3s var(--ease);
+  z-index:3;
+}
+.discover-card:hover .discover-card__arrow{background:#fff;color:#000;border-color:#fff}
+.discover-card--shops{grid-column:1/8;grid-row:span 2}
+.discover-card--food{grid-column:8/13;grid-row:span 1}
+.discover-card--leisure{grid-column:8/13;grid-row:span 1}
+.discover-card--kids{grid-column:1/5;grid-row:span 1}
+.discover-card--services{grid-column:5/13;grid-row:span 1}
+
+/* ===== PROMOTIONS ===== */
+.promo-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:24px;
+  margin-top:64px;
+}
+.promo-featured{
+  position:relative;
+  min-height:560px;
+  overflow:hidden;
+  cursor:pointer;
+  background:#000;
+}
+.promo-featured__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.2s var(--ease);
+}
+.promo-featured:hover .promo-featured__img{transform:scale(1.05)}
+.promo-featured__content{
+  position:absolute;inset:0;
+  padding:48px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7) 100%);
+  z-index:2;
+}
+.promo-featured__badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;
+  background:var(--c-accent);
+  color:#fff;
+  font-size:11px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:100px;
+  align-self:flex-start;
+  margin-bottom:24px;
+}
+.promo-featured__title{
+  font-family:var(--font-display);
+  font-size:clamp(28px,3.5vw,44px);
+  font-weight:600;
+  line-height:1.1;
+  letter-spacing:-.02em;
+  max-width:500px;
+  margin-bottom:16px;
+}
+.promo-featured__tenant{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:8px}
+.promo-featured__until{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.05em}
+.promo-list{display:flex;flex-direction:column;gap:16px}
+.promo-item{
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  background:#000;
+  flex:1;
+  min-height:180px;
+}
+.promo-item__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1s var(--ease);
+  filter:brightness(.7);
+}
+.promo-item:hover .promo-item__img{transform:scale(1.06);filter:brightness(.85)}
+.promo-item__content{
+  position:absolute;inset:0;
+  padding:24px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  z-index:2;
+}
+.promo-item__title{
+  font-family:var(--font-display);
+  font-size:18px;font-weight:600;
+  line-height:1.2;
+  margin-bottom:6px;
+}
+.promo-item__meta{font-size:11px;color:rgba(255,255,255,.7);letter-spacing:.05em}
+
+/* ===== FOOD ===== */
+.food-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:64px;
+}
+.food-card{
+  position:relative;
+  aspect-ratio:4/5;
+  overflow:hidden;
+  cursor:pointer;
+  background:#000;
+}
+.food-card__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.2s var(--ease);
+}
+.food-card:hover .food-card__img{transform:scale(1.08)}
+.food-card__content{
+  position:absolute;inset:0;
+  padding:28px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.8) 100%);
+  z-index:2;
+}
+.food-card__cat{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px}
+.food-card__name{font-family:var(--font-display);font-size:22px;font-weight:600;line-height:1.1;letter-spacing:-.01em;margin-bottom:6px}
+.food-card__floor{font-size:12px;color:rgba(255,255,255,.7)}
+
+/* ===== ENTERTAINMENT ===== */
+.ent-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:16px;
+  margin-top:64px;
+}
+.ent-main{
+  position:relative;
+  min-height:600px;
+  overflow:hidden;
+  background:#000;
+  cursor:pointer;
+}
+.ent-main__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.2s var(--ease);
+}
+.ent-main:hover .ent-main__img{transform:scale(1.05)}
+.ent-main__content{
+  position:absolute;inset:0;
+  padding:48px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7) 100%);
+  z-index:2;
+}
+.ent-main__title{
+  font-family:var(--font-display);
+  font-size:clamp(32px,4vw,56px);
+  font-weight:600;
+  line-height:1;
+  letter-spacing:-.02em;
+  margin-bottom:16px;
+}
+.ent-main__desc{font-size:15px;color:rgba(255,255,255,.8);max-width:440px;margin-bottom:24px}
+.ent-side{display:flex;flex-direction:column;gap:16px}
+.ent-side-item{
+  position:relative;
+  flex:1;
+  overflow:hidden;
+  background:#000;
+  cursor:pointer;
+  min-height:200px;
+}
+.ent-side-item__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1s var(--ease);
+  filter:brightness(.65);
+}
+.ent-side-item:hover .ent-side-item__img{transform:scale(1.06);filter:brightness(.8)}
+.ent-side-item__content{
+  position:absolute;inset:0;
+  padding:28px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  color:#fff;
+  z-index:2;
+}
+.ent-side-item__title{font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:4px}
+.ent-side-item__meta{font-size:12px;color:rgba(255,255,255,.65)}
+
+/* ===== EVENTS ===== */
+.events-empty{
+  margin-top:64px;
+  padding:80px 40px;
+  border:1px solid var(--c-line);
+  text-align:center;
+  background:var(--c-bg);
+}
+.events-empty__icon{
+  width:64px;height:64px;
+  margin:0 auto 24px;
+  border:1px solid var(--c-line);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--c-muted);
+}
+.events-empty__title{
+  font-family:var(--font-display);
+  font-size:24px;font-weight:600;
+  margin-bottom:12px;
+}
+.events-empty__text{color:var(--c-muted);font-size:15px}
+
+/* ===== ATMOSPHERE ===== */
+.atmo-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(2,280px);
+  gap:8px;
+  margin-top:64px;
+}
+.atmo-item{
+  position:relative;
+  overflow:hidden;
+  background:#000;
+}
+.atmo-item__img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 1.4s var(--ease);
+}
+.atmo-item:hover .atmo-item__img{transform:scale(1.06)}
+.atmo-item--1{grid-column:1/3;grid-row:1/3}
+.atmo-item--2{grid-column:3/4;grid-row:1/2}
+.atmo-item--3{grid-column:4/5;grid-row:1/2}
+.atmo-item--4{grid-column:3/5;grid-row:2/3}
+
+/* ===== LOCATION ===== */
+.location-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  margin-top:64px;
+  align-items:start;
+}
+.location-info{display:flex;flex-direction:column;gap:32px}
+.location-block{
+  padding-bottom:24px;
+  border-bottom:1px solid var(--c-line);
+}
+.location-block:last-child{border-bottom:none}
+.location-block__label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--c-muted);margin-bottom:12px}
+.location-block__value{font-family:var(--font-display);font-size:20px;font-weight:500;line-height:1.3}
+.location-block__value small{display:block;font-family:var(--font-body);font-size:13px;color:var(--c-muted);margin-top:6px;font-weight:400}
+.location-map{
+  aspect-ratio:4/5;
+  background:var(--c-warm);
+  position:relative;
+  overflow:hidden;
+}
+.location-map iframe{width:100%;height:100%;border:0;filter:grayscale(.3)}
+
+/* ===== FOOTER ===== */
+.footer{
+  background:var(--c-ink);
+  color:#fff;
+  padding:80px 48px 32px;
+}
+.footer__inner{max-width:var(--max);margin:0 auto}
+.footer__top{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 1fr 1fr;
+  gap:48px;
+  padding-bottom:48px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.footer__brand{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.footer__brand-mark{width:28px;height:28px;background:var(--c-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.footer__addr{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;max-width:280px}
+.footer__col-title{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:20px}
+.footer__col a{display:block;font-size:14px;color:rgba(255,255,255,.8);padding:6px 0;transition:color .25s var(--ease)}
+.footer__col a:hover{color:var(--c-accent)}
+.footer__bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:32px;
+  font-size:12px;color:rgba(255,255,255,.4);
+  flex-wrap:wrap;gap:16px;
+}
+.footer__socials{display:flex;gap:16px}
+.footer__socials a{
+  width:36px;height:36px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s var(--ease);
+}
+.footer__socials a:hover{background:var(--c-accent);border-color:var(--c-accent)}
+
+/* ===== SUBPAGES ===== */
+.sub-hero{
+  padding:160px 48px 80px;
+  max-width:var(--max);margin:0 auto;
+}
+.sub-hero__eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--c-muted);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.sub-hero__eyebrow::before{content:'';width:24px;height:1px;background:var(--c-muted)}
+.sub-hero__title{font-family:var(--font-display);font-size:clamp(40px,6vw,80px);font-weight:700;line-height:1;letter-spacing:-.03em;margin-bottom:24px}
+.sub-hero__desc{font-size:17px;color:var(--c-muted);max-width:600px}
+
+/* Shops page */
+.shops-filters{
+  display:flex;gap:12px;flex-wrap:wrap;
+  padding:0 48px;
+  max-width:var(--max);margin:0 auto 40px;
+}
+.filter-btn{
+  padding:10px 20px;
+  border:1px solid var(--c-line);
+  background:transparent;
+  font-size:13px;font-weight:500;
+  border-radius:100px;
+  transition:all .25s var(--ease);
+}
+.filter-btn:hover{border-color:var(--c-ink)}
+.filter-btn.active{background:var(--c-ink);color:#fff;border-color:var(--c-ink)}
+.shops-search{
+  margin:0 48px 32px;
+  max-width:var(--max);
+  position:relative;
+}
+.shops-search input{
+  width:100%;
+  padding:16px 20px 16px 48px;
+  border:1px solid var(--c-line);
+  background:#fff;
+  font-family:var(--font-body);
+  font-size:15px;
+  outline:none;
+  transition:border-color .25s var(--ease);
+}
+.shops-search input:focus{border-color:var(--c-ink)}
+.shops-search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--c-muted)}
+.shops-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  padding:0 48px;
+  max-width:var(--max);margin:0 auto 120px;
+}
+.shop-card{
+  background:#fff;
+  padding:24px;
+  border:1px solid var(--c-line);
+  transition:all .3s var(--ease);
+  cursor:pointer;
+}
+.shop-card:hover{border-color:var(--c-ink);transform:translateY(-4px)}
+.shop-card__logo{
+  width:100%;aspect-ratio:16/10;
+  background:var(--c-warm);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+  font-family:var(--font-display);
+  font-size:18px;font-weight:600;
+  color:var(--c-ink);
+  overflow:hidden;
+}
+.shop-card__logo img{width:100%;height:100%;object-fit:cover}
+.shop-card__name{font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:6px}
+.shop-card__cat{font-size:12px;color:var(--c-muted);margin-bottom:12px}
+.shop-card__meta{display:flex;justify-content:space-between;font-size:11px;color:var(--c-muted);padding-top:12px;border-top:1px solid var(--c-line)}
+
+/* ===== ABOUT PAGE ===== */
+.about-hero-img{
+  height:60vh;min-height:400px;
+  background-size:cover;background-position:center;
+  margin:0 48px;
+  max-width:calc(var(--max) - 96px);
+  margin-left:auto;margin-right:auto;
+}
+.about-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:32px;
+  padding:80px 48px;
+  max-width:var(--max);margin:0 auto;
+}
+.about-stat{padding-top:24px;border-top:1px solid var(--c-line)}
+.about-stat__num{font-family:var(--font-display);font-size:48px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.about-stat__label{font-size:13px;color:var(--c-muted)}
+.about-text{
+  max-width:720px;
+  margin:0 auto;
+  padding:0 48px 120px;
+  font-size:17px;
+  line-height:1.7;
+  color:var(--c-ink-soft);
+}
+.about-text p{margin-bottom:20px}
+.about-text p:first-child::first-letter{
+  font-family:var(--font-display);
+  font-size:72px;
+  font-weight:700;
+  float:left;
+  line-height:.9;
+  margin:8px 12px 0 0;
+  color:var(--c-accent);
+}
+
+/* ===== TENANTS PAGE ===== */
+.tenants-hero{
+  background:var(--c-ink);
+  color:#fff;
+  padding:160px 48px 100px;
+}
+.tenants-hero__inner{max-width:var(--max);margin:0 auto}
+.tenants-hero__eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:20px}
+.tenants-hero__title{font-family:var(--font-display);font-size:clamp(36px,5vw,64px);font-weight:700;line-height:1;letter-spacing:-.02em;margin-bottom:24px;max-width:800px}
+.tenants-hero__desc{font-size:17px;color:rgba(255,255,255,.7);max-width:600px;margin-bottom:40px}
+.tenants-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:16px 32px;
+  background:var(--c-accent);color:#fff;
+  font-size:14px;font-weight:600;
+  border-radius:100px;
+  transition:all .3s var(--ease);
+}
+.tenants-cta:hover{background:#fff;color:var(--c-ink)}
+.tenants-features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+  padding:80px 48px;
+  max-width:var(--max);margin:0 auto;
+}
+.tenant-feature{
+  padding:32px;
+  border:1px solid var(--c-line);
+  background:#fff;
+}
+.tenant-feature__num{font-family:var(--font-display);font-size:13px;color:var(--c-accent);margin-bottom:16px;letter-spacing:.1em}
+.tenant-feature__title{font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:12px}
+.tenant-feature__text{font-size:14px;color:var(--c-muted);line-height:1.6}
+
+/* ===== FORM ===== */
+.form{
+  max-width:640px;
+  margin:64px auto 0;
+  padding:0 48px;
+}
+.form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form__field{display:flex;flex-direction:column;gap:8px}
+.form__field.full{grid-column:1/-1}
+.form__label{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted)}
+.form__input,.form__textarea{
+  padding:14px 16px;
+  border:1px solid var(--c-line);
+  background:#fff;
+  font-family:var(--font-body);
+  font-size:15px;
+  outline:none;
+  transition:border-color .25s var(--ease);
+}
+.form__input:focus,.form__textarea:focus{border-color:var(--c-ink)}
+.form__textarea{resize:vertical;min-height:120px}
+.form__submit{
+  padding:16px 32px;
+  background:var(--c-ink);color:#fff;
+  font-size:14px;font-weight:600;
+  border-radius:100px;
+  margin-top:16px;
+  transition:all .3s var(--ease);
+}
+.form__submit:hover{background:var(--c-accent)}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1024px){
+  .header__nav{display:none}
+  .header__hours{display:none}
+  .header__menu-btn{display:flex}
+  .hero{padding:40px 24px 32px}
+  .section{padding:80px 24px}
+  .section--full{padding-left:24px;padding-right:24px}
+  .intro{grid-template-columns:1fr;gap:48px;padding:100px 24px 60px}
+  .discover-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:260px}
+  .discover-card--shops,.discover-card--food,.discover-card--leisure,.discover-card--kids,.discover-card--services{grid-column:auto;grid-row:auto}
+  .promo-grid{grid-template-columns:1fr}
+  .promo-featured{min-height:440px}
+  .food-grid{grid-template-columns:repeat(2,1fr)}
+  .ent-grid{grid-template-columns:1fr}
+  .ent-main{min-height:400px}
+  .atmo-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,200px)}
+  .atmo-item--1{grid-column:1/3;grid-row:1/2}
+  .atmo-item--4{grid-column:1/3;grid-row:3/4}
+  .location-grid{grid-template-columns:1fr;gap:40px}
+  .footer{padding:60px 24px 24px}
+  .footer__top{grid-template-columns:1fr 1fr;gap:32px}
+  .shops-grid{grid-template-columns:repeat(2,1fr);padding:0 24px}
+  .shops-filters,.shops-search{padding-left:24px;padding-right:24px}
+  .about-stats{grid-template-columns:repeat(2,1fr);padding:60px 24px}
+  .about-hero-img{margin:0 24px;max-width:calc(100% - 48px)}
+  .about-text{padding:0 24px 80px}
+  .tenants-features{grid-template-columns:1fr;padding:60px 24px}
+  .sub-hero{padding:140px 24px 60px}
+  .form{padding:0 24px}
+  .form__row{grid-template-columns:1fr}
+  .tenants-hero{padding:140px 24px 80px}
+}
+@media (max-width:640px){
+  .hero__bottom{flex-direction:column;align-items:flex-start}
+  .hero__meta{gap:24px;flex-wrap:wrap}
+  .discover-grid{grid-template-columns:1fr;grid-auto-rows:260px}
+  .food-grid{grid-template-columns:1fr}
+  .atmo-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,200px)}
+  .atmo-item--1,.atmo-item--4{grid-column:auto;grid-row:auto}
+  .footer__top{grid-template-columns:1fr}
+  .shops-grid{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .hero__bg{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header__logo" onclick="showPage('home')">
+    <div class="header__logo-mark">M</div>
+    <span>МАРКОС МОЛЛ</span>
+  </div>
+  <nav class="header__nav">
+    <a onclick="showPage('shops')">Магазины</a>
+    <a onclick="showPage('food')">Еда</a>
+    <a onclick="showPage('leisure')">Досуг</a>
+    <a onclick="showPage('promo')">Акции</a>
+    <a onclick="showPage('events')">События</a>
+    <a onclick="showPage('about')">О ТЦ</a>
+    <a onclick="showPage('location')">Как добраться</a>
+  </nav>
+  <div class="header__actions">
+    <div class="header__hours"><span class="dot"></span> 10:00 — 22:00</div>
+    <button class="header__search-btn" onclick="toggleSearch()" aria-label="Поиск">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <button class="header__menu-btn" onclick="toggleMenu()" aria-label="Меню">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="searchOverlay">
+  <button class="search-overlay__close" onclick="toggleSearch()">✕</button>
+  <div class="search-overlay__inner">
+    <input class="search-overlay__input" id="searchInput" type="text" placeholder="Найти магазин, ресторан, событие..." oninput="runSearch(this.value)">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu__close" onclick="toggleMenu()"></button>
+  <div class="mobile-menu__link" onclick="showPage('shops');toggleMenu()">Магазины</div>
+  <div class="mobile-menu__link" onclick="showPage('food');toggleMenu()">Еда</div>
+  <div class="mobile-menu__link" onclick="showPage('leisure');toggleMenu()">Досуг</div>
+  <div class="mobile-menu__link" onclick="showPage('promo');toggleMenu()">Акции</div>
+  <div class="mobile-menu__link" onclick="showPage('events');toggleMenu()">События</div>
+  <div class="mobile-menu__link" onclick="showPage('about');toggleMenu()">О ТЦ</div>
+  <div class="mobile-menu__link" onclick="showPage('location');toggleMenu()">Как добраться</div>
+  <div class="mobile-menu__link" onclick="showPage('tenants');toggleMenu()">Арендаторам</div>
+  <div class="mobile-menu__hours">
+    <div class="mobile-menu__hours-title">Режим работы</div>
+    <div class="mobile-menu__hours-value">Ежедневно 10:00 — 22:00</div>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg"></div>
+    <div class="hero__content">
+      <div class="hero__eyebrow">Владимир · Торговый центр</div>
+      <h1 class="hero__title">Место, где <em>встречаются</em> покупки, еда и впечатления</h1>
+      <div class="hero__bottom">
+        <div class="hero__meta">
+          <div class="hero__meta-item">Сегодня<strong>10:00 — 22:00</strong></div>
+          <div class="hero__meta-item">Этажей<strong>3 уровня</strong></div>
+          <div class="hero__meta-item">Парковка<strong>Бесплатно</strong></div>
+        </div>
+        <a class="hero__cta" onclick="showPage('shops')">
+          Каталог магазинов
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="intro__text">Маркос Молл — <em>пространство</em> для покупок, встреч, отдыха и впечатлений в самом сердце Владимира.</div>
+    <div class="intro__aside">
+      <div class="intro__stat">
+        <div class="intro__stat-num">150+</div>
+        <div class="intro__stat-label">Магазинов и сервисов</div>
+      </div>
+      <div class="intro__stat">
+        <div class="intro__stat-num">30+</div>
+        <div class="intro__stat-label">Ресторанов и кафе</div>
+      </div>
+      <div class="intro__stat">
+        <div class="intro__stat-num">3</div>
+        <div class="intro__stat-label">Уровня развлечений</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCOVER -->
+  <section class="section--full" style="padding:40px 48px 120px;max-width:var(--max);margin:0 auto">
+    <div class="section__eyebrow">Что здесь есть</div>
+    <h2 class="section__title">Всё, что нужно — в одном месте</h2>
+    <div class="discover-grid">
+      <div class="discover-card discover-card--shops" onclick="showPage('shops')">
+        <div class="discover-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c429c645-b569-42c7-89a8-94b6f859ea70.png')"></div>
+        <div class="discover-card__content">
+          <div class="discover-card__tag">01 · Магазины</div>
+          <div class="discover-card__title">Одежда, обувь, аксессуары и всё для дома</div>
+          <div class="discover-card__desc">Более 150 брендов — от масс-маркета до премиум-сегмента</div>
+        </div>
+        <div class="discover-card__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+      <div class="discover-card discover-card--food" onclick="showPage('food')">
+        <div class="discover-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png')"></div>
+        <div class="discover-card__content">
+          <div class="discover-card__tag">02 · Еда</div>
+          <div class="discover-card__title">Рестораны и кафе</div>
+        </div>
+        <div class="discover-card__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+      <div class="discover-card discover-card--leisure" onclick="showPage('leisure')">
+        <div class="discover-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1148454e7-7ea6-4feb-9d74-943e5355ee9c.png')"></div>
+        <div class="discover-card__content">
+          <div class="discover-card__tag">03 · Досуг</div>
+          <div class="discover-card__title">Кино и развлечения</div>
+        </div>
+        <div class="discover-card__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+      <div class="discover-card discover-card--kids">
+        <div class="discover-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c5c88876-c749-48c3-888a-0c127da679b5.png')"></div>
+        <div class="discover-card__content">
+          <div class="discover-card__tag">04 · Семья</div>
+          <div class="discover-card__title">Для детей</div>
+        </div>
+        <div class="discover-card__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+      <div class="discover-card discover-card--services">
+        <div class="discover-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/179c2f5e1-b8f7-488c-897d-c8ac5ed8ccd3.png')"></div>
+        <div class="discover-card__content">
+          <div class="discover-card__tag">05 · Инфраструктура</div>
+          <div class="discover-card__title">Сервисы, парковка, банкоматы</div>
+          <div class="discover-card__desc">Всё для комфортного визита</div>
+        </div>
+        <div class="discover-card__arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMOTIONS -->
+  <section class="section--full" style="background:var(--c-warm);padding:120px 48px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="section__eyebrow">Сейчас в Маркос Молл</div>
+      <h2 class="section__title">Акции и предложения</h2>
+      <div class="promo-grid">
+        <div class="promo-featured">
+          <div class="promo-featured__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c429c645-b569-42c7-89a8-94b6f859ea70.png')"></div>
+          <div class="promo-featured__content">
+            <div class="promo-featured__badge">Featured · до 31 августа</div>
+            <div class="promo-featured__tenant">Коллекция магазинов</div>
+            <div class="promo-featured__title">Летняя распродажа: скидки до 70% на новую коллекцию</div>
+            <div class="promo-featured__until">Действует до 31.08.2026</div>
+          </div>
+        </div>
+        <div class="promo-list">
+          <div class="promo-item">
+            <div class="promo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png')"></div>
+            <div class="promo-item__content">
+              <div class="promo-item__meta">Рестораны · до 25.08</div>
+              <div class="promo-item__title">Ужин для двоих со скидкой 30%</div>
+            </div>
+          </div>
+          <div class="promo-item">
+            <div class="promo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/19156b9dc-4c99-4b93-a41d-294fe44ca7ec.png')"></div>
+            <div class="promo-item__content">
+              <div class="promo-item__meta">Кино · каждый вторник</div>
+              <div class="promo-item__title">Билет на любой сеанс за 250 ₽</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOD -->
+  <section class="section">
+    <div class="section__eyebrow">Гастрономия</div>
+    <h2 class="section__title">Время поесть</h2>
+    <p class="section__subtitle">От быстрого перекуса до ужина при свечах — выбирайте формат под настроение.</p>
+    <div class="food-grid">
+      <div class="food-card" onclick="showPage('food')">
+        <div class="food-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1eeb74bfe-c15a-4f21-b1df-927d3661e463.png')"></div>
+        <div class="food-card__content">
+          <div class="food-card__cat">Рестораны</div>
+          <div class="food-card__name">Авторская кухня</div>
+          <div class="food-card__floor">3 этаж</div>
+        </div>
+      </div>
+      <div class="food-card" onclick="showPage('food')">
+        <div class="food-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png')"></div>
+        <div class="food-card__content">
+          <div class="food-card__cat">Кафе</div>
+          <div class="food-card__name">Уютные встречи</div>
+          <div class="food-card__floor">2 этаж</div>
+        </div>
+      </div>
+      <div class="food-card" onclick="showPage('food')">
+        <div class="food-card__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c5c88876-c749-48c3-888a-0c127da679b5.png')"></div>
+        <div class="food-card__content">
+          <div class="food-card__cat">Кофейни</div>
+          <div class="food-card__name">Кофе и десерты</div>
+          <div class="food-card__floor">1 этаж</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTERTAINMENT -->
+  <section class="section--full" style="background:var(--c-ink);color:#fff;padding:120px 48px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="section__eyebrow" style="color:rgba(255,255,255,.5)">Развлечения</div>
+      <h2 class="section__title">Есть чем заняться</h2>
+      <p class="section__subtitle" style="color:rgba(255,255,255,.6)">Не только покупки. Кино, боулинг, детские зоны и события на каждый день.</p>
+      <div class="ent-grid">
+        <div class="ent-main" onclick="showPage('leisure')">
+          <div class="ent-main__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/19156b9dc-4c99-4b93-a41d-294fe44ca7ec.png')"></div>
+          <div class="ent-main__content">
+            <div class="ent-main__title">Кинотеатр нового поколения</div>
+            <div class="ent-main__desc">Современный зал с Dolby Atmos, комфортные кресла и премьеры каждую неделю.</div>
+            <a class="hero__cta" style="align-self:flex-start">Расписание сеансов
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="ent-side">
+          <div class="ent-side-item" onclick="showPage('leisure')">
+            <div class="ent-side-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1148454e7-7ea6-4feb-9d74-943e5355ee9c.png')"></div>
+            <div class="ent-side-item__content">
+              <div class="ent-side-item__title">Боулинг</div>
+              <div class="ent-side-item__meta">3 этаж · 12 дорожек</div>
+            </div>
+          </div>
+          <div class="ent-side-item" onclick="showPage('leisure')">
+            <div class="ent-side-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c5c88876-c749-48c3-888a-0c127da679b5.png')"></div>
+            <div class="ent-side-item__content">
+              <div class="ent-side-item__title">Детская зона</div>
+              <div class="ent-side-item__meta">2 этаж · с 4 лет</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="section">
+    <div class="section__eyebrow">Афиша</div>
+    <h2 class="section__title">События</h2>
+    <div class="events-empty">
+      <div class="events-empty__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+      <div class="events-empty__title">Скоро здесь появятся новые события</div>
+      <div class="events-empty__text">Следите за обновлениями — мы регулярно проводим концерты, мастер-классы и сезонные фестивали.</div>
+    </div>
+  </section>
+
+  <!-- ATMOSPHERE -->
+  <section class="section--full" style="padding:120px 48px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="section__eyebrow">Атмосфера</div>
+      <h2 class="section__title">Пространство, в котором хочется остаться</h2>
+      <div class="atmo-grid">
+        <div class="atmo-item atmo-item--1">
+          <div class="atmo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1f0406b32-c618-4538-abb5-b77fa4ec7c5b.png')"></div>
+        </div>
+        <div class="atmo-item atmo-item--2">
+          <div class="atmo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c429c645-b569-42c7-89a8-94b6f859ea70.png')"></div>
+        </div>
+        <div class="atmo-item atmo-item--3">
+          <div class="atmo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png')"></div>
+        </div>
+        <div class="atmo-item atmo-item--4">
+          <div class="atmo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c5c88876-c749-48c3-888a-0c127da679b5.png')"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="section--warm" style="background:var(--c-warm);padding:120px 48px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="section__eyebrow">Контакты</div>
+      <h2 class="section__title">Как нас найти</h2>
+      <div class="location-grid">
+        <div class="location-info">
+          <div class="location-block">
+            <div class="location-block__label">Адрес</div>
+            <div class="location-block__value">г. Владимир, Суздальский проспект<small>Въезд со стороны парковки</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Телефон</div>
+            <div class="location-block__value">+7 (4922) 00-00-00<small>Ежедневно с 10:00 до 22:00</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Парковка</div>
+            <div class="location-block__value">Бесплатно, первые 2 часа<small>Более 1000 машиномест</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Общественный транспорт</div>
+            <div class="location-block__value">Автобусы 1, 7, 12, 28<small>Остановка «Маркос Молл»</small></div>
+          </div>
+        </div>
+        <div class="location-map">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=40.38%2C56.11%2C40.44%2C56.15&layer=mapnik&marker=56.13%2C40.41" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- SHOPS PAGE -->
+<div class="page" id="page-shops">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Каталог</div>
+    <h1 class="sub-hero__title">Магазины</h1>
+    <p class="sub-hero__desc">Более 150 брендов — от одежды и обуви до электроники и товаров для дома.</p>
+  </div>
+  <div class="shops-search">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="shopSearchInput" placeholder="Поиск по названию..." oninput="filterShops()">
+  </div>
+  <div class="shops-filters" id="shopFilters">
+    <button class="filter-btn active" data-cat="all" onclick="setFilter(this)">Все</button>
+    <button class="filter-btn" data-cat="fashion" onclick="setFilter(this)">Одежда</button>
+    <button class="filter-btn" data-cat="shoes" onclick="setFilter(this)">Обувь</button>
+    <button class="filter-btn" data-cat="beauty" onclick="setFilter(this)">Красота</button>
+    <button class="filter-btn" data-cat="home" onclick="setFilter(this)">Дом</button>
+    <button class="filter-btn" data-cat="tech" onclick="setFilter(this)">Электроника</button>
+    <button class="filter-btn" data-cat="kids" onclick="setFilter(this)">Дети</button>
+    <button class="filter-btn" data-cat="sport" onclick="setFilter(this)">Спорт</button>
+  </div>
+  <div class="shops-grid" id="shopsGrid"></div>
+</div>
+
+<!-- FOOD PAGE -->
+<div class="page" id="page-food">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Гастрономия</div>
+    <h1 class="sub-hero__title">Еда</h1>
+    <p class="sub-hero__desc">Рестораны, кафе, кофейни и фаст-фуд — на любой вкус и бюджет.</p>
+  </div>
+  <div class="shops-filters">
+    <button class="filter-btn active">Все</button>
+    <button class="filter-btn">Рестораны</button>
+    <button class="filter-btn">Кафе</button>
+    <button class="filter-btn">Кофейни</button>
+    <button class="filter-btn">Fast Food</button>
+  </div>
+  <div class="shops-grid" id="foodGrid"></div>
+</div>
+
+<!-- LEISURE PAGE -->
+<div class="page" id="page-leisure">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Развлечения</div>
+    <h1 class="sub-hero__title">Досуг</h1>
+    <p class="sub-hero__desc">Кино, боулинг, детские зоны и активности для всей семьи.</p>
+  </div>
+  <div class="shops-grid" id="leisureGrid"></div>
+</div>
+
+<!-- PROMO PAGE -->
+<div class="page" id="page-promo">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Специальные предложения</div>
+    <h1 class="sub-hero__title">Акции</h1>
+    <p class="sub-hero__desc">Выгодные предложения от наших арендаторов — обновляются каждую неделю.</p>
+  </div>
+  <section class="section--full" style="padding:40px 48px 120px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="promo-grid">
+        <div class="promo-featured">
+          <div class="promo-featured__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c429c645-b569-42c7-89a8-94b6f859ea70.png')"></div>
+          <div class="promo-featured__content">
+            <div class="promo-featured__badge">Featured · до 31 августа</div>
+            <div class="promo-featured__tenant">Коллекция магазинов</div>
+            <div class="promo-featured__title">Летняя распродажа: скидки до 70%</div>
+            <div class="promo-featured__until">Действует до 31.08.2026</div>
+          </div>
+        </div>
+        <div class="promo-list">
+          <div class="promo-item"><div class="promo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png')"></div><div class="promo-item__content"><div class="promo-item__meta">Рестораны · до 25.08</div><div class="promo-item__title">Ужин для двоих −30%</div></div></div>
+          <div class="promo-item"><div class="promo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/19156b9dc-4c99-4b93-a41d-294fe44ca7ec.png')"></div><div class="promo-item__content"><div class="promo-item__meta">Кино · каждый вторник</div><div class="promo-item__title">Билет за 250 ₽</div></div></div>
+          <div class="promo-item"><div class="promo-item__img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1148454e7-7ea6-4feb-9d74-943e5355ee9c.png')"></div><div class="promo-item__content"><div class="promo-item__meta">Боулинг · будни</div><div class="promo-item__title">2 игры по цене 1</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- EVENTS PAGE -->
+<div class="page" id="page-events">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Афиша</div>
+    <h1 class="sub-hero__title">События</h1>
+    <p class="sub-hero__desc">Концерты, мастер-классы, детские праздники и сезонные фестивали.</p>
+  </div>
+  <section class="section" style="padding-top:0">
+    <div class="events-empty">
+      <div class="events-empty__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
+      <div class="events-empty__title">Скоро здесь появятся новые события</div>
+      <div class="events-empty__text">Следите за обновлениями — мы регулярно проводим мероприятия для гостей всех возрастов.</div>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT PAGE -->
+<div class="page" id="page-about">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">О проекте</div>
+    <h1 class="sub-hero__title">О торговом центре</h1>
+  </div>
+  <div class="about-hero-img" style="background-image:url('https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1f0406b32-c618-4538-abb5-b77fa4ec7c5b.png')"></div>
+  <div class="about-stats">
+    <div class="about-stat"><div class="about-stat__num">150+</div><div class="about-stat__label">Магазинов</div></div>
+    <div class="about-stat"><div class="about-stat__num">30+</div><div class="about-stat__label">Ресторанов и кафе</div></div>
+    <div class="about-stat"><div class="about-stat__num">1000+</div><div class="about-stat__label">Парковочных мест</div></div>
+    <div class="about-stat"><div class="about-stat__num">3</div><div class="about-stat__label">Уровня</div></div>
+  </div>
+  <div class="about-text">
+    <p>Маркос Молл — современный торгово-развлекательный центр, расположенный в городе Владимире. Пространство объединяет магазины ведущих российских и международных брендов, рестораны, кинотеатр и зоны для семейного отдыха.</p>
+    <p>Мы создаём комфортную среду для покупок, встреч и впечатлений. Архитектура комплекса продумана так, чтобы каждый визит был удобным — от просторной парковки до интуитивной навигации внутри.</p>
+    <p>Наша цель — стать местом притяжения для жителей Владимира и гостей города, предлагая качественный сервис и разнообразный досуг в одном пространстве.</p>
+  </div>
+</div>
+
+<!-- LOCATION PAGE -->
+<div class="page" id="page-location">
+  <div class="sub-hero">
+    <div class="sub-hero__eyebrow">Контакты</div>
+    <h1 class="sub-hero__title">Как добраться</h1>
+    <p class="sub-hero__desc">Удобное расположение, бесплатная парковка и доступность на общественном транспорте.</p>
+  </div>
+  <section class="section--warm" style="background:var(--c-warm);padding:40px 48px 120px">
+    <div style="max-width:var(--max);margin:0 auto">
+      <div class="location-grid">
+        <div class="location-info">
+          <div class="location-block">
+            <div class="location-block__label">Адрес</div>
+            <div class="location-block__value">г. Владимир, Суздальский проспект<small>Въезд со стороны парковки</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Телефон</div>
+            <div class="location-block__value">+7 (4922) 00-00-00<small>Ежедневно с 10:00 до 22:00</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Парковка</div>
+            <div class="location-block__value">Бесплатно, первые 2 часа<small>Более 1000 машиномест</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">Общественный транспорт</div>
+            <div class="location-block__value">Автобусы 1, 7, 12, 28<small>Остановка «Маркос Молл»</small></div>
+          </div>
+          <div class="location-block">
+            <div class="location-block__label">На автомобиле</div>
+            <div class="location-block__value">Въезд с Суздальского проспекта<small>Навигатор: «Маркос Молл, Владимир»</small></div>
+          </div>
+        </div>
+        <div class="location-map">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=40.38%2C56.11%2C40.44%2C56.15&layer=mapnik&marker=56.13%2C40.41" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TENANTS PAGE -->
+<div class="page" id="page-tenants">
+  <div class="tenants-hero">
+    <div class="tenants-hero__inner">
+      <div class="tenants-hero__eyebrow">Для бизнеса</div>
+      <h1 class="tenants-hero__title">Станьте арендатором Маркос Молл</h1>
+      <p class="tenants-hero__desc">Мы предлагаем современные площади для retail, food и entertainment в одном из ключевых торговых центров Владимира.</p>
+      <a class="tenants-cta" onclick="document.getElementById('tenantForm').scrollIntoView({behavior:'smooth'})">
+        Оставить заявку
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="tenants-features">
+    <div class="tenant-feature">
+      <div class="tenant-feature__num">01</div>
+      <div class="tenant-feature__title">Трафик</div>
+      <div class="tenant-feature__text">Высокая проходимость благодаря удачному расположению и развитой инфраструктуре района.</div>
+    </div>
+    <div class="tenant-feature">
+      <div class="tenant-feature__num">02</div>
+      <div class="tenant-feature__title">Инфраструктура</div>
+      <div class="tenant-feature__text">Современные инженерные системы, удобная логистика, парковка и зоны отдыха для посетителей.</div>
+    </div>
+    <div class="tenant-feature">
+      <div class="tenant-feature__num">03</div>
+      <div class="tenant-feature__title">Маркетинг</div>
+      <div class="tenant-feature__text">Поддержка арендаторов через общие рекламные кампании, события и digital-каналы ТЦ.</div>
+    </div>
+  </div>
+  <section class="section" style="padding-top:0" id="tenantForm">
+    <div class="section__eyebrow">Заявка</div>
+    <h2 class="section__title">Свяжитесь с нами</h2>
+    <form class="form" onsubmit="submitForm(event,'tenant')">
+      <div class="form__row">
+        <div class="form__field"><label class="form__label">Имя</label><input class="form__input" type="text" required></div>
+        <div class="form__field"><label class="form__label">Компания</label><input class="form__input" type="text"></div>
+      </div>
+      <div class="form__row">
+        <div class="form__field"><label class="form__label">Телефон</label><input class="form__input" type="tel" required></div>
+        <div class="form__field"><label class="form__label">E-mail</label><input class="form__input" type="email" required></div>
+      </div>
+      <div class="form__row">
+        <div class="form__field full"><label class="form__label">Желаемая площадь, м²</label><input class="form__input" type="text"></div>
+      </div>
+      <div class="form__row">
+        <div class="form__field full"><label class="form__label">Комментарий</label><textarea class="form__textarea"></textarea></div>
+      </div>
+      <button class="form__submit" type="submit">Отправить заявку</button>
+    </form>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__top">
+      <div>
+        <div class="footer__brand"><div class="footer__brand-mark">M</div>МАРКОС МОЛЛ</div>
+        <div class="footer__addr">г. Владимир, Суздальский проспект<br>Ежедневно 10:00 — 22:00</div>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Навигация</div>
+        <a onclick="showPage('shops')">Магазины</a>
+        <a onclick="showPage('food')">Еда</a>
+        <a onclick="showPage('leisure')">Досуг</a>
+        <a onclick="showPage('promo')">Акции</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">О проекте</div>
+        <a onclick="showPage('about')">О ТЦ</a>
+        <a onclick="showPage('location')">Как добраться</a>
+        <a onclick="showPage('tenants')">Арендаторам</a>
+        <a onclick="showPage('events')">События</a>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Контакты</div>
+        <a href="tel:+74922000000">+7 (4922) 00-00-00</a>
+        <a href="mailto:info@marcos-mall.ru">info@marcos-mall.ru</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div>© 2026 Маркос Молл. Все права защищены.</div>
+      <div class="footer__socials">
+        <a href="#" aria-label="VK"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.8 17.2c-5.4 0-8.5-3.7-8.6-9.9h2.7c.1 4.5 2.1 6.4 3.7 6.8V7.3h2.5v3.9c1.6-.2 3.3-1.9 3.9-3.9h2.5c-.4 2.4-2.1 4.2-3.3 4.9 1.2.6 3.1 2.1 3.8 5h-2.7c-.6-1.8-2-3.2-3.9-3.4v3.4h-.6z"/></svg></a>
+        <a href="#" aria-label="Telegram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== DATA =====
+const shopsData=[
+  {name:'Zarina',cat:'fashion',floor:'1',hours:'10:00–22:00',color:'#C9A87C'},
+  {name:'Befree',cat:'fashion',floor:'1',hours:'10:00–22:00',color:'#2C2C2C'},
+  {name:'Gloria Jeans',cat:'fashion',floor:'2',hours:'10:00–22:00',color:'#1A4D8C'},
+  {name:'Henderson',cat:'fashion',floor:'1',hours:'10:00–21:00',color:'#3A3A3A'},
+  {name:'Rendez-Vous',cat:'shoes',floor:'1',hours:'10:00–22:00',color:'#8B4513'},
+  {name:'Ekonika',cat:'shoes',floor:'2',hours:'10:00–22:00',color:'#6B4423'},
+  {name:'Л\'Этуаль',cat:'beauty',floor:'1',hours:'10:00–22:00',color:'#E8B4BC'},
+  {name:'Рив Гош',cat:'beauty',floor:'1',hours:'10:00–22:00',color:'#C41E3A'},
+  {name:'Hoff',cat:'home',floor:'3',hours:'10:00–22:00',color:'#FF6B35'},
+  {name:'Декорация',cat:'home',floor:'2',hours:'10:00–21:00',color:'#8B7355'},
+  {name:'М.Видео',cat:'tech',floor:'2',hours:'10:00–22:00',color:'#E30613'},
+  {name:'DNS',cat:'tech',floor:'2',hours:'10:00–22:00',color:'#F7A600'},
+  {name:'Детский мир',cat:'kids',floor:'3',hours:'10:00–22:00',color:'#00A0E3'},
+  {name:'Кораблик',cat:'kids',floor:'3',hours:'10:00–21:00',color:'#4A90E2'},
+  {name:'Sportmaster',cat:'sport',floor:'2',hours:'10:00–22:00',color:'#003DA5'},
+  {name:'Decathlon',cat:'sport',floor:'2',hours:'10:00–22:00',color:'#0082C3'},
+];
+const foodData=[
+  {name:'IL Патио',cat:'Ресторан',floor:'3',hours:'11:00–23:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png'},
+  {name:'Якитория',cat:'Ресторан',floor:'3',hours:'11:00–23:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1eeb74bfe-c15a-4f21-b1df-927d3661e463.png'},
+  {name:'Шоколадница',cat:'Кофейня',floor:'1',hours:'08:00–22:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png'},
+  {name:'Кофемания',cat:'Кофейня',floor:'1',hours:'08:00–22:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1eeb74bfe-c15a-4f21-b1df-927d3661e463.png'},
+  {name:'Вилка-Ложка',cat:'Кафе',floor:'2',hours:'10:00–22:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1eeb74bfe-c15a-4f21-b1df-927d3661e463.png'},
+  {name:'Додо Пицца',cat:'Fast Food',floor:'1',hours:'10:00–23:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/129d58fbf-0e6f-44a9-a779-f594db7da39c.png'},
+];
+const leisureData=[
+  {name:'Кинотеатр',cat:'Кино',floor:'3',hours:'10:00–00:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/19156b9dc-4c99-4b93-a41d-294fe44ca7ec.png'},
+  {name:'Боулинг',cat:'Развлечения',floor:'3',hours:'12:00–00:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1148454e7-7ea6-4feb-9d74-943e5355ee9c.png'},
+  {name:'Детская зона',cat:'Дети',floor:'2',hours:'10:00–21:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/1c5c88876-c749-48c3-888a-0c127da679b5.png'},
+  {name:'Караоке',cat:'Развлечения',floor:'3',hours:'18:00–02:00',img:'https://image.qwenlm.ai/public_source/6e0dc64f-5932-42dc-8bcb-5e64241c9f95/19156b9dc-4c99-4b93-a41d-294fe44ca7ec.png'},
+];
+
+// ===== RENDER =====
+function renderShops(filter='all',query=''){
+  const grid=document.getElementById('shopsGrid');
+  const q=query.toLowerCase();
+  const filtered=shopsData.filter(s=>(filter==='all'||s.cat===filter)&&s.name.toLowerCase().includes(q));
+  grid.innerHTML=filtered.map(s=>`
+    <div class="shop-card">
+      <div class="shop-card__logo" style="background:${s.color};color:#fff">${s.name}</div>
+      <div class="shop-card__name">${s.name}</div>
+      <div class="shop-card__cat">${catLabel(s.cat)}</div>
+      <div class="shop-card__meta"><span>Этаж ${s.floor}</span><span>${s.hours}</span></div>
+    </div>
+  `).join('')||'<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--c-muted)">Ничего не найдено</div>';
+}
+function renderFood(){
+  const grid=document.getElementById('foodGrid');
+  grid.innerHTML=foodData.map(f=>`
+    <div class="shop-card">
+      <div class="shop-card__logo" style="padding:0"><img src="${f.img}" alt="${f.name}" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="shop-card__name">${f.name}</div>
+      <div class="shop-card__cat">${f.cat}</div>
+      <div class="shop-card__meta"><span>Этаж ${f.floor}</span><span>${f.hours}</span></div>
+    </div>
+  `).join('');
+}
+function renderLeisure(){
+  const grid=document.getElementById('leisureGrid');
+  grid.innerHTML=leisureData.map(l=>`
+    <div class="shop-card">
+      <div class="shop-card__logo" style="padding:0"><img src="${l.img}" alt="${l.name}" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="shop-card__name">${l.name}</div>
+      <div class="shop-card__cat">${l.cat}</div>
+      <div class="shop-card__meta"><span>Этаж ${l.floor}</span><span>${l.hours}</span></div>
+    </div>
+  `).join('');
+}
+function catLabel(c){return{fashion:'Одежда',shoes:'Обувь',beauty:'Красота',home:'Дом',tech:'Электроника',kids:'Дети',sport:'Спорт'}[c]||c}
+
+let currentFilter='all';
+function setFilter(btn){
+  document.querySelectorAll('#shopFilters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter=btn.dataset.cat;
+  filterShops();
+}
+function filterShops(){
+  const q=document.getElementById('shopSearchInput').value;
+  renderShops(currentFilter,q);
+}
+
+// ===== NAVIGATION =====
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(id==='shops')renderShops();
+  if(id==='food')renderFood();
+  if(id==='leisure')renderLeisure();
+  // Update header active
+  document.querySelectorAll('.header__nav a').forEach(a=>a.classList.remove('active'));
+}
+
+// ===== SEARCH =====
+function toggleSearch(){
+  const o=document.getElementById('searchOverlay');
+  o.classList.toggle('open');
+  if(o.classList.contains('open')){
+    setTimeout(()=>document.getElementById('searchInput').focus(),100);
+  }else{
+    document.getElementById('searchInput').value='';
+    document.getElementById('searchResults').innerHTML='';
+  }
+}
+function runSearch(q){
+  const r=document.getElementById('searchResults');
+  if(!q.trim()){r.innerHTML='';return}
+  const ql=q.toLowerCase();
+  const results=[
+    ...shopsData.filter(s=>s.name.toLowerCase().includes(ql)).map(s=>({name:s.name,type:'Магазин',meta:`Этаж ${s.floor} · ${s.hours}`})),
+    ...foodData.filter(f=>f.name.toLowerCase().includes(ql)).map(f=>({name:f.name,type:'Еда',meta:`${f.cat} · Этаж ${f.floor}`})),
+    ...leisureData.filter(l=>l.name.toLowerCase().includes(ql)).map(l=>({name:l.name,type:'Досуг',meta:`${l.cat} · Этаж ${l.floor}`})),
+  ];
+  r.innerHTML=results.length?results.map(x=>`
+    <div class="search-result">
+      <div>
+        <div class="search-result__name">${x.name}</div>
+        <div class="search-result__meta">${x.meta}</div>
+      </div>
+      <div class="search-result__tag">${x.type}</div>
+    </div>
+  `).join(''):'<div style="color:rgba(255,255,255,.4);padding:20px 0">Ничего не найдено</div>';
+}
+
+// ===== MOBILE MENU =====
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open')}
+
+// ===== HEADER SCROLL =====
+window.addEventListener('scroll',()=>{
+  document.getElementById('header').classList.toggle('scrolled',window.scrollY>40);
+});
+
+// ===== FORM =====
+function submitForm(e,type){
+  e.preventDefault();
+  const btn=e.target.querySelector('.form__submit');
+  const orig=btn.textContent;
+  btn.textContent='Отправлено ✓';
+  btn.style.background='var(--c-accent)';
+  setTimeout(()=>{btn.textContent=orig;btn.style.background='';e.target.reset()},2500);
+}
+
+// ===== INIT =====
+renderShops();
+renderFood();
+renderLeisure();
+</script>
+</body>
+</html>
